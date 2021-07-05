@@ -1,7 +1,12 @@
 import express from 'express';
+const app = express();
+
 import routes from './routes';
 
-const app = express();
+import cors from 'cors';
+
+app.use(cors());
+
 const PORT = process.env.PORT || 3333;
 
 app.get('/', (req, res) => {
