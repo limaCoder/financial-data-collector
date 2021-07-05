@@ -1,6 +1,6 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
-export async function RoboDolar() {
+export async function RoboDolar(req, res) {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     const moedaBase = 'dolar';
@@ -22,11 +22,11 @@ export async function RoboDolar() {
         throw new Error('Cotação não encontrada');
       }
 
-      console.log(`o valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`)
-      
+      console.log(`O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`)
+      return res.status(200).json({status: true, response: [{moedaBase: moedaBase, moedaFinal: moedaFinal, resultado: resultado, message: `O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`}]});
     } catch(err) {
-      console.log(err.message)
-    }
-
+      console.log(err.message);
+      return res.status(400).json({status: false, response: [], log: err.message});
     // await browser.close();
+    }
 }

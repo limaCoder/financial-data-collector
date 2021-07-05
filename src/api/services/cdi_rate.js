@@ -1,6 +1,6 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
-export async function RoboTaxaCDI() {
+export async function RoboTaxaCDI(req, res) {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   const urlDaTaxaCDI = `https://www.melhorcambio.com/cdi`;
@@ -19,10 +19,10 @@ export async function RoboTaxaCDI() {
       throw new Error('Taxa CDI não encontrada');
     }
 
-    console.log(`A Taxa CDI esse mês está valendo: ${resultado}`)
-
+    return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI esse mês está valendo: ${resultado}`}]});
   } catch(err) {
-    console.log(err.message)
+    console.log(err.message);
+    return res.status(400).json({status: false, response: [], log: err.message});
   }
 
   // await browser.close();
