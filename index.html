@@ -1,0 +1,30 @@
+<body>
+  
+</body>
+
+<script>
+  async function getContent() {
+    try {
+      const response = await fetch('http://localhost:3333/dolar')
+      // console.log(response)
+
+      const data = await response.json()
+
+      show(data)
+
+      console.log(data)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  getContent()
+
+  function show(values) {
+    let output = `${values.resultado}`
+
+    document.querySelector('body').innerHTML = output;
+  }
+
+</script>
