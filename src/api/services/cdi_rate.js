@@ -20,6 +20,7 @@ export async function RoboTaxaCDI(req, res) {
     }
 
     return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI esse mês está valendo: ${resultado}`}]});
+    
   } catch(err) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});

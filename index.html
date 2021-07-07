@@ -1,18 +1,28 @@
 <body>
-  
+  <p class="taxa-cdi"></p>
+  <p class="dolar"></p>
+  <p class="inflation"></p>
 </body>
 
 <script>
   async function getContent() {
     try {
-      const response = await fetch('http://localhost:3333/dolar')
-      // console.log(response)
+      const taxaCDI = await fetch('http://localhost:3333/taxa-cdi')
+      const dolar = await fetch('http://localhost:3333/dolar')
+      const inflacao = await fetch('http://localhost:3333/inflacao')
+      // console.log(dolar)
 
-      const data = await response.json()
+      const dataTaxaCDI = await taxaCDI.json()
+      const dataDolar = await dolar.json()
+      const dataInflacao = await inflacao.json()
 
-      show(data)
+      console.log(dataTaxaCDI)
+      console.log(dataDolar)
+      console.log(dataInflacao)
 
-      console.log(data)
+      showTaxaCDI(dataTaxaCDI)
+      showDolar(dataDolar)
+      showInflacao(dataInflacao)
 
     } catch (error) {
       console.log(error)
@@ -21,10 +31,19 @@
 
   getContent()
 
-  function show(values) {
-    let output = `${values.resultado}`
+  function showTaxaCDI(value) {
+    let output = `${value.response[0].cdi}`
+    document.querySelector('.taxa-cdi').innerHTML = output;
+  }
 
-    document.querySelector('body').innerHTML = output;
+  function showDolar(value) {
+    let output = `${value.response[0].resultado}`
+    document.querySelector('.dolar').innerHTML = output;
+  }
+
+  function showInflacao(value) {
+    let output = `${value.response[0].ipca}`
+    document.querySelector('.inflation').innerHTML = output;
   }
 
 </script>
