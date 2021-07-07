@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 export async function RoboDolar(req, res) {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
     const page = await browser.newPage();
     const moedaBase = 'dolar';
     const moedaFinal = 'real';

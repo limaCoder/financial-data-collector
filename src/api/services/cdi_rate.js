@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 export async function RoboTaxaCDI(req, res) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   const urlDaTaxaCDI = `https://www.melhorcambio.com/cdi`;
   await page.goto(urlDaTaxaCDI);
@@ -20,7 +20,7 @@ export async function RoboTaxaCDI(req, res) {
     }
 
     return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI esse mês está valendo: ${resultado}`}]});
-    
+
   } catch(err) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});
