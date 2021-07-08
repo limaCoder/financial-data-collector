@@ -4,7 +4,14 @@ export async function RoboInflacaoIPCA(req, res) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   const urlDaInflacaoIPCA = `https://www.ibge.gov.br/explica/inflacao.php`;
-  await page.goto(urlDaInflacaoIPCA);
+  await page.goto(urlDaInflacaoIPCA, {waitUntil: 'domcontentloaded'});
+
+  // disabling images or css
+  await page.setRequestInterception(true)
+  page.on('request', (request) => {
+    if (request.resourceType() === 'image') request.abort()
+    else request.continue()
+  })
 
   try {
     const resultado = await page.evaluate(() => {
@@ -26,6 +33,6 @@ export async function RoboInflacaoIPCA(req, res) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});
   }
-  
+
   // await browser.close();
 }

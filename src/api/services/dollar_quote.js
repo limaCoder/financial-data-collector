@@ -6,7 +6,15 @@ export async function RoboDolar(req, res) {
   const moedaBase = 'dolar';
   const moedaFinal = 'real';
   const urlDaMoeda = `https://www.google.com/search?q=${moedaBase}+para+${moedaFinal}`;
-  await page.goto(urlDaMoeda);
+  await page.goto(urlDaMoeda, {waitUntil: 'domcontentloaded'});
+
+  // disabling images or css
+  await page.setRequestInterception(true)
+  page.on('request', (request) => {
+    if (request.resourceType() === 'image') request.abort()
+    else request.continue()
+  })
+
   // await page.screenshot({ path: 'example.png' });
 
   try {
@@ -29,6 +37,6 @@ export async function RoboDolar(req, res) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});
   }
-  
+
   // await browser.close();
 }

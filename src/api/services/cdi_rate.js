@@ -4,7 +4,14 @@ export async function RoboTaxaCDI(req, res) {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   const urlDaTaxaCDI = `https://www.melhorcambio.com/cdi`;
-  await page.goto(urlDaTaxaCDI);
+  await page.goto(urlDaTaxaCDI, {waitUntil: 'domcontentloaded'});
+
+  // disabling images or css
+  await page.setRequestInterception(true)
+  page.on('request', (request) => {
+    if (request.resourceType() === 'image') request.abort()
+    else request.continue()
+  })
 
   try {
     const resultado = await page.evaluate(() => {
