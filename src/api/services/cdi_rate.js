@@ -9,7 +9,7 @@ export async function RoboTaxaCDI(req, res) {
       '--disable-dev-shm-usage'
     ]
   });
-  
+
   const page = await browser.newPage();
   const urlDaTaxaCDI = `https://www.melhorcambio.com/cdi`;
   await page.goto(urlDaTaxaCDI, {waitUntil: 'domcontentloaded'});
@@ -33,7 +33,8 @@ export async function RoboTaxaCDI(req, res) {
     if (!resultado) {
       throw new Error('Taxa CDI não encontrada');
     }
-
+    
+    await browser.close();
     return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI esse mês está valendo: ${resultado}`}]});
 
   } catch(err) {
@@ -41,5 +42,4 @@ export async function RoboTaxaCDI(req, res) {
     return res.status(400).json({status: false, response: [], log: err.message});
   }
 
-  // await browser.close();
 }

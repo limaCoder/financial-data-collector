@@ -9,7 +9,7 @@ export async function RoboDolar(req, res) {
       '--disable-dev-shm-usage'
     ]
   });
-  
+
   const page = await browser.newPage();
   const moedaBase = 'dolar';
   const moedaFinal = 'real';
@@ -37,14 +37,14 @@ export async function RoboDolar(req, res) {
     if (!resultado) {
       throw new Error('Cotação não encontrada');
     }
-
+    
+    await browser.close();
     console.log(`O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`)
     return res.status(200).json({status: true, response: [{moedaBase: moedaBase, moedaFinal: moedaFinal, resultado: resultado, message: `O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`}]});
-
+    
   } catch(err) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});
   }
 
-  // await browser.close();
 }

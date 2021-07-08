@@ -9,7 +9,7 @@ export async function RoboInflacaoIPCA(req, res) {
       '--disable-dev-shm-usage'
     ]
   });
-  
+
   const page = await browser.newPage();
   const urlDaInflacaoIPCA = `https://www.ibge.gov.br/explica/inflacao.php`;
   await page.goto(urlDaInflacaoIPCA, {waitUntil: 'domcontentloaded'});
@@ -34,13 +34,13 @@ export async function RoboInflacaoIPCA(req, res) {
       throw new Error('Valor do IPCA (Inflação) do último mês não encontrado');
     }
 
+    await browser.close();
     console.log(`IPCA (Inflação) do último mês: ${resultado}`);
     return res.status(200).json({status: true, response: [{ipca: resultado, message: `IPCA (Inflação) do último mês: ${resultado}`}]});
-
+    
   } catch(err) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});
   }
-
-  // await browser.close();
+  
 }
