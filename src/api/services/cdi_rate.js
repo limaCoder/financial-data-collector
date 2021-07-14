@@ -24,18 +24,18 @@ export async function RoboTaxaCDI(req, res) {
   try {
     const resultado = await page.evaluate(() => {
       try {
-        return document.querySelector('#inp-mes').value;
+        return document.querySelector('#inp-ano').value;
       } catch(e) {
         console.log(e)
       }
     });
     
     if (!resultado) {
-      throw new Error('Taxa CDI não encontrada');
+      throw new Error('Taxa CDI do último ano não encontrada');
     }
     
     await browser.close();
-    return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI esse mês está valendo: ${resultado}`}]});
+    return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI do último ano está valendo: ${resultado}`}]});
 
   } catch(err) {
     console.log(err.message);
