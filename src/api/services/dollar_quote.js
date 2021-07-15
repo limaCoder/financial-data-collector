@@ -1,5 +1,9 @@
 import puppeteer from 'puppeteer';
 
+import { saveAndReadFile } from '../../utils/state';
+
+const contentFilePath = './src/api/data/dollar_quote/dollar_quote.json';
+
 export async function RoboDolar(req, res) {
   const browser = await puppeteer.launch({ 
     headless: true, 
@@ -39,8 +43,13 @@ export async function RoboDolar(req, res) {
     }
     
     await browser.close();
-    console.log(`O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`)
-    return res.status(200).json({status: true, response: [{moedaBase: moedaBase, moedaFinal: moedaFinal, resultado: resultado, message: `O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`}]});
+
+    const contentDollar = saveAndReadFile(contentFilePath, 'resultado', resultado);
+
+    console.log(`O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`);
+
+    return res.status(200).json({status: true, response: contentDollar});
+    /* return res.status(200).json({status: true, response: [{moedaBase: moedaBase, moedaFinal: moedaFinal, resultado: resultado, message: `O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`}]}); */
     
   } catch(err) {
     console.log(err.message);

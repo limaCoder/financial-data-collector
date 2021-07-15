@@ -1,5 +1,9 @@
 import puppeteer from 'puppeteer';
 
+import { saveAndReadFile } from '../../utils/state';
+
+const contentFilePath = './src/api/data/cdi_rate/cdi_rate.json';
+
 export async function RoboTaxaCDI(req, res) {
   const browser = await puppeteer.launch({ 
     headless: true, 
@@ -35,7 +39,11 @@ export async function RoboTaxaCDI(req, res) {
     }
     
     await browser.close();
-    return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI do último ano está valendo: ${resultado}`}]});
+
+    const contentCDIRate = saveAndReadFile(contentFilePath, 'resultado', resultado);
+
+    return res.status(200).json({status: true, response: contentCDIRate});
+    /* return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI do último ano está valendo: ${resultado}`}]}); */
 
   } catch(err) {
     console.log(err.message);

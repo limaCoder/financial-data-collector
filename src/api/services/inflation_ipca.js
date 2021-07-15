@@ -1,5 +1,9 @@
 import puppeteer from 'puppeteer';
 
+import { saveAndReadFile } from '../../utils/state';
+
+const contentFilePath = './src/api/data/inflation_ipca/inflation_ipca.json';
+
 export async function RoboInflacaoIPCA(req, res) {
   const browser = await puppeteer.launch({ 
     headless: true, 
@@ -35,8 +39,13 @@ export async function RoboInflacaoIPCA(req, res) {
     }
 
     await browser.close();
+
+    const contentInflationIPCA = saveAndReadFile(contentFilePath, 'resultado', resultado);
+
     console.log(`IPCA (Inflação) dos últimos 12 meses: ${resultado}`);
-    return res.status(200).json({status: true, response: [{ipca: resultado, message: `IPCA (Inflação) dos últimos 12 meses: ${resultado}`}]});
+
+    return res.status(200).json({status: true, response: contentInflationIPCA});
+    /* return res.status(200).json({status: true, response: [{ipca: resultado, message: `IPCA (Inflação) dos últimos 12 meses: ${resultado}`}]}); */
     
   } catch(err) {
     console.log(err.message);
