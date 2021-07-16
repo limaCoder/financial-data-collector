@@ -1,8 +1,12 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
 
 import { saveAndReadFile } from '../../utils/state';
 
 const contentFilePath = './src/api/data/cdi_rate/cdi_rate.json';
+
+// add stealth plugin and use defaults (all evasion techniques)
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 
 export async function RoboTaxaCDI(req, res) {
   const browser = await puppeteer.launch({ 
@@ -14,7 +18,7 @@ export async function RoboTaxaCDI(req, res) {
     ]
   });
 
-  const page = await browser.newPage();
+  const page = (await browser.pages())[0];
   const urlDaTaxaCDI = `https://www.melhorcambio.com/cdi`;
   await page.goto(urlDaTaxaCDI, {waitUntil: 'domcontentloaded'});
 

@@ -1,8 +1,12 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
 
 import { saveAndReadFile } from '../../utils/state';
 
 const contentFilePath = './src/api/data/inflation_ipca/inflation_ipca.json';
+
+// add stealth plugin and use defaults (all evasion techniques)
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 
 export async function RoboInflacaoIPCA(req, res) {
   const browser = await puppeteer.launch({ 
@@ -14,8 +18,8 @@ export async function RoboInflacaoIPCA(req, res) {
     ]
   });
 
-  const page = await browser.newPage();
-  const urlDaInflacaoIPCA = `https://www.ibge.gov.br/indicadores`;
+  const page = (await browser.pages())[0];
+  const urlDaInflacaoIPCA = `https://www.bcb.gov.br`;
   await page.goto(urlDaInflacaoIPCA, {waitUntil: 'domcontentloaded'});
 
   // disabling images or css
@@ -28,7 +32,7 @@ export async function RoboInflacaoIPCA(req, res) {
   try {
     const resultado = await page.evaluate(() => {
       try {
-        return document.querySelector('#indicador-ipca td.dozemeses').innerText;
+        return document.querySelector('div > .panorama .percentual').innerText;
       } catch(e) {
         console.log(e)
       }

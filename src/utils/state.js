@@ -1,21 +1,12 @@
 import fs from 'fs';
 
-import { createJsonFile } from './json_text_content';
+export function saveAndReadFile(contentFilePath, contentKey, data) {
 
-export async function saveAndReadFile(contentFilePath, contentKey, contentValue) {
-  // save file
-  const contentKeyString = JSON.stringify(contentKey)
-  const contentValueString = JSON.stringify(contentValue)
+  const result = {resultado: data}
 
-  const jsonFile = createJsonFile(contentKeyString, contentValueString)
+  fs.writeFile(contentFilePath, JSON.stringify(result, 'utf-8'), () => {});
 
-  await fs.writeFileSync(contentFilePath, jsonFile);
+  console.log(result)
 
-  // read file
-  const fileBuffer = await fs.readFileSync(contentFilePath, 'utf-8')
-  const contentJson = JSON.parse(fileBuffer)
-
-  // return
-  console.log(contentJson)
-  return contentJson;
+  return result;
 }

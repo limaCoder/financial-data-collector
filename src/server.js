@@ -7,7 +7,7 @@ import cors from 'cors';
 
 app.use(cors());
 
-const PORT = process.env.PORT || 3333;
+const PORT = process.env.PORT || 5500;
 
 app.get('/', (req, res) => {
   return res.json("Servidor funcionando com sucesso!");
@@ -15,4 +15,4 @@ app.get('/', (req, res) => {
 
 app.use(routes);
 
-app.listen(PORT, () => console.log("Servidor rodando na porta 3333"));
+app.listen(PORT, () => console.log("Servidor rodando na porta 5500"));
