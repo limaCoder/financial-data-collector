@@ -1,3 +1,4 @@
+import { CronJob } from 'cron';
 import puppeteer from 'puppeteer-extra';
 
 import { saveAndReadFile } from '../../utils/state';
@@ -55,5 +56,10 @@ export async function RoboInflacaoIPCA(req, res) {
     console.log(err.message);
     return res.status(400).json({status: false, response: [], log: err.message});
   }
-  
 }
+
+new CronJob({
+  cronTime: "0 0 1 * *", // At 12:00 AM, on day 1 of the month
+  onTick: RoboInflacaoIPCA,
+  start: true,
+});

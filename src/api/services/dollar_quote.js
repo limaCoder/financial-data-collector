@@ -2,6 +2,8 @@
 // it augments the installed puppeteer with plugin functionality
 import puppeteer from 'puppeteer-extra';
 
+import { CronJob } from 'cron';
+
 import { saveAndReadFile } from '../../utils/state'; // importando função responsável pela escrita e leitura de arquivos
 
 const contentFilePath = './src/api/data/dollar_quote/dollar_quote.json'; // argumento a ser enviado para o primeiro parâmetro da função acima
@@ -64,3 +66,9 @@ export async function RoboDolar(req, res) {
     return res.status(400).json({status: false, response: [], log: err.message});
   }
 }
+
+new CronJob({
+  cronTime: "30 * * * *", // At 30 minutes past the hour
+  onTick: RoboDolar,
+  start: true,
+});
