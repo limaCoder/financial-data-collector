@@ -4,10 +4,6 @@ import puppeteer from 'puppeteer-extra';
 
 import { CronJob } from 'cron';
 
-import { saveAndReadFile } from '../../utils/state'; // importando função responsável pela escrita e leitura de arquivos
-
-const contentFilePath = './src/api/data/dollar_quote/dollar_quote.json'; // argumento a ser enviado para o primeiro parâmetro da função acima
-
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
@@ -51,15 +47,10 @@ export async function RoboDolar(req, res) {
     }
 
     await browser.close();
-    
-    const contentDollar = saveAndReadFile(contentFilePath, 'resultado', resultado); // invocando a função que escreve e lê arquivos
-    
-    console.log(`O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`);
         
-    return res.status(200).json({status: true, response: contentDollar}); // retornando a leitura do arquivo
-    
-    // forma anterior na qual estava retornando com sucesso os dados, porém sem o uso da escrita e leitura dos arquivos
-    /* return res.status(200).json({status: true, response: [{moedaBase: moedaBase, moedaFinal: moedaFinal, resultado: resultado, message: `O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`}]}); */
+    console.log(`O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`);
+            
+    return res.status(200).json({status: true, response: [{moedaBase: moedaBase, moedaFinal: moedaFinal, resultado: resultado, message: `O valor de 1 ${moedaBase} em ${moedaFinal} é ${resultado}`}]});
     
   } catch(err) {
     console.log(err.message);
@@ -67,8 +58,8 @@ export async function RoboDolar(req, res) {
   }
 }
 
-new CronJob({
+/* new CronJob({
   cronTime: "30 * * * *", // At 30 minutes past the hour
   onTick: RoboDolar,
   start: true,
-});
+}); */

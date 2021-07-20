@@ -1,9 +1,6 @@
 import { CronJob } from 'cron';
+
 import puppeteer from 'puppeteer-extra';
-
-import { saveAndReadFile } from '../../utils/state';
-
-const contentFilePath = './src/api/data/cdi_rate/cdi_rate.json';
 
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
@@ -45,10 +42,7 @@ export async function RoboTaxaCDI(req, res) {
     
     await browser.close();
 
-    const contentCDIRate = saveAndReadFile(contentFilePath, 'resultado', resultado);
-
-    return res.status(200).json({status: true, response: contentCDIRate});
-    /* return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI do último ano está valendo: ${resultado}`}]}); */
+    return res.status(200).json({status: true, response: [{cdi: resultado, message: `A Taxa CDI do último ano está valendo: ${resultado}`}]});
 
   } catch(err) {
     console.log(err.message);
@@ -56,8 +50,8 @@ export async function RoboTaxaCDI(req, res) {
   }
 }
 
-new CronJob({
+/* new CronJob({
   cronTime: "0 0 1 * *", // At 12:00 AM, on day 1 of the month
   onTick: RoboTaxaCDI,
   start: true,
-});
+}); */

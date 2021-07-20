@@ -1,9 +1,6 @@
 import { CronJob } from 'cron';
+
 import puppeteer from 'puppeteer-extra';
-
-import { saveAndReadFile } from '../../utils/state';
-
-const contentFilePath = './src/api/data/inflation_ipca/inflation_ipca.json';
 
 // add stealth plugin and use defaults (all evasion techniques)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
@@ -45,12 +42,9 @@ export async function RoboInflacaoIPCA(req, res) {
 
     await browser.close();
 
-    const contentInflationIPCA = saveAndReadFile(contentFilePath, 'resultado', resultado);
-
     console.log(`IPCA (Inflação) dos últimos 12 meses: ${resultado}`);
 
-    return res.status(200).json({status: true, response: contentInflationIPCA});
-    /* return res.status(200).json({status: true, response: [{ipca: resultado, message: `IPCA (Inflação) dos últimos 12 meses: ${resultado}`}]}); */
+    return res.status(200).json({status: true, response: [{ipca: resultado, message: `IPCA (Inflação) dos últimos 12 meses: ${resultado}`}]});
     
   } catch(err) {
     console.log(err.message);
@@ -58,8 +52,8 @@ export async function RoboInflacaoIPCA(req, res) {
   }
 }
 
-new CronJob({
+/* new CronJob({
   cronTime: "0 0 1 * *", // At 12:00 AM, on day 1 of the month
   onTick: RoboInflacaoIPCA,
   start: true,
-});
+}); */
